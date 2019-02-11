@@ -1,0 +1,17 @@
+---
+BasedOnStyle: Chromium
+AlignAfterOpenBracket: Align
+IndentWidth: '4'
+UseTab: Never
+AllowAllParametersOfDeclarationOnNextLine: true
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+AlignTrailingComments: true
+#
+# setup braces style
+#
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterFunction: true
+    AfterEnum: true
+    AfterNamespace: true
+...

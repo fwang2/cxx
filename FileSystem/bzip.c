@@ -1,47 +1,46 @@
+#include <bzlib.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <sys/types.h>
 #include <unistd.h>
-#include <bzlib.h>
 #define FILE_MODE (S_IRUSR | S_IWUSR)
 #define BLOCKSIZE (900000)
-#define BUFSIZE   (909600)
+#define BUFSIZE (909600)
 
-ssize_t do_read(int fd, void *buf, size_t count)
-{
+ssize_t
+do_read(int fd, void* buf, size_t count) {
     ssize_t bytesRemaining = count;
     ssize_t nbytes = 0;
-    char *pbuf = (char *)buf;
-    while ((bytesRemaining > 0) && (nbytes = read(fd, pbuf, bytesRemaining)) > 0)
-    {
+    char* pbuf = (char*)buf;
+    while ((bytesRemaining > 0) &&
+           (nbytes = read(fd, pbuf, bytesRemaining)) > 0) {
         bytesRemaining -= nbytes;
         pbuf += nbytes;
     }
 
-    if (nbytes < 0)
-    {
-        perror("do_read()");;
+    if (nbytes < 0) {
+        perror("do_read()");
+        ;
         return nbytes;
     }
 
     return (count - bytesRemaining);
 }
 
-ssize_t do_write(int fd, const void *buf, size_t count)
-{
+ssize_t
+do_write(int fd, const void* buf, size_t count) {
     ssize_t bytesRemaining = count;
     ssize_t nbytes = 0;
-    const char *pbuf = (const char *)buf;
-    while ((bytesRemaining > 0) && ((nbytes = write(fd, pbuf, bytesRemaining)) > 0))
-    {
+    const char* pbuf = (const char*)buf;
+    while ((bytesRemaining > 0) &&
+           ((nbytes = write(fd, pbuf, bytesRemaining)) > 0)) {
         bytesRemaining -= nbytes;
         pbuf += nbytes;
     }
 
-    if (nbytes < 0)
-    {
+    if (nbytes < 0) {
         perror("do_write()");
         return nbytes;
     }
@@ -49,16 +48,15 @@ ssize_t do_write(int fd, const void *buf, size_t count)
     return (count - bytesRemaining);
 }
 
-
-int main(int argc, char** argv) {
+int
+main(int argc, char** argv) {
     struct stat sb;
-    size_t blocksize = 9*100000;
+    size_t blocksize = 9 * 100000;
     unsigned int insize = 0;
     unsigned int outsize = 0;
     ssize_t ret;
     char in[BLOCKSIZE];
     char out[BUFSIZE];
-
 
     if (argc != 2) {
         fprintf(stderr, "must provide a input file\n");
@@ -125,7 +123,6 @@ int main(int argc, char** argv) {
 
         // write data to output
         ret = do_write(outfd, out, outsize);
-
     }
 
     close(infd);
